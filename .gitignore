@@ -1,0 +1,34 @@
+# Ignore todo excepto backend y spa-client
+
+!/becrud/
+!/api/
+!/spa-client/
+!/manage.py
+!/db.sqlite3
+# Opcional: permite solo archivos clave del backend/spa-client
+spa-client/node_modules/
+spa-client/dist/
+spa-client/.env
+# Django residuos comunes
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.swp
+.DS_Store
+.env
+venv/
+# Excluir backups u otros
+*.bak
+*.old
+.opencode/*
+.agents/*
+AGENTS.md
+skills-lock.json
