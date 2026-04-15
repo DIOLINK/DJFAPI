@@ -1,119 +1,75 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+      {/* HERO SECTION */}
+      <section className="wedding-hero">
+        <div className="hero-content">
+          <h1 className="hero-title">Reserva tu momento especial</h1>
+          <p className="hero-desc">Haz de cada cita una experiencia única. Agenda, confirma y recibe recordatorios de manera instantánea. Disfruta la planificación sin estrés, con toques románticos y atención personalizada.</p>
+          <button className="cta-main">Reservar ahora</button>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
+        <div className="hero-bg-ornament"></div>
       </section>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
+      {/* CARROUSEL/GALERÍA (dummy) */}
+      <section className="wedding-gallery">
+        <h2>Galería de momentos</h2>
+        <div className="gallery-carousel">
+          <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=480&q=80" alt="Pareja feliz"/>
+          <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=480&q=80" alt="Ramo de flores"/>
+          <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=480&q=80" alt="Momentos románticos"/>
         </div>
       </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+      {/* SHOWCASE DE FUNCIONES */}
+      <section className="planning-tools">
+        <h2>Planificación fácil y romántica</h2>
+        <div className="tools-features">
+          <div className="tool-card">
+            <span role="img" aria-label="calendario">🗓️</span>
+            <h3>Reserva Online</h3>
+            <p>Elige tu fecha ideal en menos de 1 minuto, desde cualquier lugar.</p>
+          </div>
+          <div className="tool-card">
+            <span role="img" aria-label="notificación">📩</span>
+            <h3>Confirmación instantánea</h3>
+            <p>Recibe tu cita por correo y en tu Google Calendar, ¡sin preocupaciones!</p>
+          </div>
+          <div className="tool-card">
+            <span role="img" aria-label="corazón">💖</span>
+            <h3>Recordatorios automáticos</h3>
+            <p>Olvida el estrés, nos encargamos de avisarte antes del gran momento.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIOS */}
+      <section className="testimonials">
+        <h2>Historias felices</h2>
+        <div className="testimonial-cards">
+          <blockquote className="testimonial">
+            "Gracias a la plataforma, reservé y confirmé nuestra cita tan fácil... ¡Fue perfecto!"<br/>
+            <span>– Sofía & Pablo</span>
+          </blockquote>
+          <blockquote className="testimonial">
+            "El sitio es hermoso y simple, me encantó recibir todo en mi calendario y sentirme especial desde el primer click."
+            <br/> <span>– Camila V.</span>
+          </blockquote>
+        </div>
+      </section>
+
+      {/* FORMULARIO DE CONTACTO */}
+      <section className="contact-form-section">
+        <h2>¿Tienes dudas? Escribe tu consulta</h2>
+        <form className="contact-form">
+          <input type="text" placeholder="Nombre" required />
+          <input type="email" placeholder="Correo electrónico" required />
+          <textarea placeholder="Cuéntanos tu idea o pregunta..." required></textarea>
+          <button type="submit" className="cta-main">Enviar mensaje</button>
+        </form>
+      </section>
     </>
   )
 }

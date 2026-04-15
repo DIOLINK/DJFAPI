@@ -1,18 +1,18 @@
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
+  --text: #856465;                 /* Marrón-lila suave, amigable para rosa */
+  --text-h: #5d3643;               /* Cherry brown para headings */
+  --bg: #fbeaec;                   /* Rosa muy claro predominante */
+  --border: #e7d5d9;               /* Rosa-gris muy pálido */
+  --code-bg: #ffe5f0;              /* Rosa pastel aún más claro, para highlights */
+  --accent: #e2be8a;               /* Oro suave (té helado pastel) */
+  --accent-bg: rgba(226, 190, 138, 0.12); /* Fondo oro suave transparente */
+  --accent-border: rgba(226, 190, 138, 0.46); /* Sombra/detalle oro suave */
+  --social-bg: rgba(250, 220, 225, 0.5); /* Fondo rosado para cajas sociales */
   --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+    0 10px 15px -7px rgba(180,120,90,0.08), 0 4px 6px -3px rgba(200,160,140,0.04);
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --sans: 'Nunito', 'Segoe UI', Roboto, system-ui, sans-serif;
+  --heading: 'Playfair Display', 'Georgia', serif;
   --mono: ui-monospace, Consolas, monospace;
 
   font: 18px/145% var(--sans);
@@ -29,6 +29,7 @@
     font-size: 16px;
   }
 }
+
 
 @media (prefers-color-scheme: dark) {
   :root {
