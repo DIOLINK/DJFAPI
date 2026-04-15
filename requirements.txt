@@ -1,0 +1,6 @@
+# Añade a requirements.txt
+# Google Calendar API deps
+
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib
