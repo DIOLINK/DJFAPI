@@ -1,8 +1,20 @@
 import './App.css'
+import ThemeToggle from './components/ThemeToggle';
+import { useEffect } from 'react';
+import { useThemeStore } from './stores/useThemeStore';
+import { GallerySection } from './components/GallerySection';
 
 function App() {
+  const { theme } = useThemeStore();
+  // Aplica clase a body o html cuando cambia theme
+  useEffect(() => {
+    document.body.classList.toggle('theme-dark', theme === 'dark');
+    document.body.classList.toggle('theme-light', theme === 'light');
+  }, [theme]);
+
   return (
     <>
+      <ThemeToggle />
       {/* HERO SECTION */}
       <section className="wedding-hero">
         <div className="hero-content">
@@ -13,15 +25,8 @@ function App() {
         <div className="hero-bg-ornament"></div>
       </section>
 
-      {/* CARROUSEL/GALERÍA (dummy) */}
-      <section className="wedding-gallery">
-        <h2>Galería de momentos</h2>
-        <div className="gallery-carousel">
-          <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=480&q=80" alt="Pareja feliz"/>
-          <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=480&q=80" alt="Ramo de flores"/>
-          <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=480&q=80" alt="Momentos románticos"/>
-        </div>
-      </section>
+      {/* CARROUSEL/GALERÍA dinámica */}
+      <GallerySection />
 
       {/* SHOWCASE DE FUNCIONES */}
       <section className="planning-tools">
