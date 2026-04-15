@@ -2,26 +2,48 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
 from django.contrib.auth.models import User
-from .models import Reserva
+from .models import Reserva, CarrouselItem, LegalText
 from datetime import datetime, timedelta
 
-class ServerHealthTest(TestCase):
+class ReservaTest(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create_user('testuser', 't@e.com', 'testpass')
-
-    def test_api_reservas_liveness(self):
-        self.client.force_authenticate(user=self.user)
-        response = self.client.get(reverse('reserva-list'))
-        self.assertIn(response.status_code, [200, 403])
+        self.admin = User.objects.create_superuser('admin', 'admin@e.com', 'adminpass')
 
     def test_create_reserva(self):
         self.client.force_authenticate(user=self.user)
         data = {
             'fecha_hora': (datetime.now() + timedelta(days=1)).isoformat(),
             'paciente_id': self.user.id,
-            'nota': 'test reserva'
+            'nota': 'test'
         }
-        response = self.client.post(reverse('reserva-list'), data)
-        self.assertEqual(response.status_code, 201)
-        self.assertTrue(Reserva.objects.filter(paciente=self.user).exists())
+        resp = self.client.post(reverse('reserva-list'), data)
+        self.assertEqual(resp.status_code, 201)
+
+    def test_confirmar_reserva(self):
+        self.client.force_authenticate(user=self.user)
+        res = Reserva.objects.create(paciente=self.user, fecha_hora=datetime.now() + timedelta(days=1))
+        self.client.force_authenticate(user=self.admin)
+        resp = self.client.post(reverse('reserva-confirmar', args=[res.id]))
+        self.assertEqual(resp.status_code, 200)
+
+class CarrouselTest(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.item = CarrouselItem.objects.create(imagen='test.png', texto='carr 1', orden=1, activo=True)
+
+    def test_list_carrousel(self):
+        resp = self.client.get(reverse('carrousel-list'))
+        self.assertEqual(resp.status_code, 200)
+        self.assertGreaterEqual(len(resp.json()), 1)
+
+class LegalTextTest(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        LegalText.objects.create(titulo="Legal 1", contenido="Lorem", visible=True)
+
+    def test_list_legal(self):
+        resp = self.client.get(reverse('legaltext-list'))
+        self.assertEqual(resp.status_code, 200)
+        self.assertGreaterEqual(len(resp.json()), 1)

@@ -4,6 +4,7 @@ from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from api.gcal_utils import crear_evento_calendar
+from api.email_utils import enviar_mail_reserva_confirmada
 from django.db import transaction
 
 class ReservaViewSet(viewsets.ModelViewSet):
@@ -40,6 +41,8 @@ class ReservaViewSet(viewsets.ModelViewSet):
             if event_id:
                 reserva.event_id = event_id
             reserva.save()
+            # enviar mail
+            enviar_mail_reserva_confirmada(reserva.paciente.email, reserva)
         return Response({"status": "confirmada", "event_id": reserva.event_id})
 
 class CarrouselItemViewSet(viewsets.ModelViewSet):
