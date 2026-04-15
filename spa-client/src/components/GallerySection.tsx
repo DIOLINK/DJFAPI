@@ -13,7 +13,7 @@ export function GallerySection() {
         setImages(data.images || []);
         setLoading(false);
       })
-      .catch((err) => {
+      .catch(() => {
         setError("No se pudo cargar la galería");
         setLoading(false);
       });
