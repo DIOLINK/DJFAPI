@@ -21,9 +21,12 @@ router.register(r'admin/carrousel', AdminCarrouselItemViewSet, basename='admin-c
 router.register(r'legaltext', LegalTextViewSet, basename='legaltext')
 router.register(r'admin/legaltext', AdminLegalTextViewSet, basename='admin-legaltext')
 
+from .googleauth import GoogleLogin, GoogleCallback, GoogleAuthVerify
+
 urlpatterns = [
     path('auth/google/login/', GoogleLogin.as_view(), name='google-login'),
     path('auth/google/callback/', GoogleCallback.as_view(), name='google-callback'),
+    path('auth/google/', GoogleAuthVerify.as_view(), name='google-verify'),
     path('', include(router.urls)),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),

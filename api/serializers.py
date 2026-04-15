@@ -2,10 +2,13 @@ from rest_framework import serializers
 from .models import Reserva, CarrouselItem, LegalText
 from django.contrib.auth.models import User
 
-class PacienteSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["id", "username", "email", "first_name", "last_name"]
+
+class PacienteSerializer(UserSerializer):
+    pass
 
 class ReservaSerializer(serializers.ModelSerializer):
     paciente = PacienteSerializer(read_only=True)

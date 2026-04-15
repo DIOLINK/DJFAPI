@@ -9,6 +9,10 @@ from django.contrib.auth import login
 from django.contrib.auth.models import User
 from api.models import Reserva
 import os
+from google.oauth2 import id_token as google_id_token
+from google.auth.transport import requests as google_requests
+from rest_framework_simplejwt.tokens import RefreshToken
+from .serializers import UserSerializer
 
 GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
@@ -61,3 +65,22 @@ class GoogleCallback(APIView):
         request.session['google_access_token'] = access_token
         request.session['google_refresh_token'] = refresh_token
         return redirect('/')
+
+class GoogleAuthVerify(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request):
+        id_token = request.data.get('token')
+        try:
+            idinfo = google_id_token.verify_oauth2_token(
+                id_token, google_requests.Request(), GOOGLE_CLIENT_ID
+            )
+            email = idinfo['email']
+            user, _ = User.objects.get_or_create(username=email, defaults={'email': email, 'first_name': idinfo.get('given_name', ''), 'last_name': idinfo.get('family_name', '')})
+            refresh = RefreshToken.for_user(user)
+            data = {
+                'user': UserSerializer(user).data,
+                'token': str(refresh.access_token),
+            }
+            return Response(data)
+        except Exception as e:
+            return Response({'error': 'Invalid Google token', 'detail': str(e)}, status=400)
