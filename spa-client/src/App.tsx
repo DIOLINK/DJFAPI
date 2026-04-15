@@ -1,11 +1,11 @@
 import './App.css'
 import ThemeToggle from './components/ThemeToggle';
 import { useEffect } from 'react';
-import { useThemeStore } from './stores/useThemeStore';
+import { themeStore } from './stores/useThemeStore';
 import { GallerySection } from './components/GallerySection';
 
 function App() {
-  const { theme } = useThemeStore();
+  const { theme } = themeStore();
   // Aplica clase a body o html cuando cambia theme
   useEffect(() => {
     document.body.classList.toggle('theme-dark', theme === 'dark');

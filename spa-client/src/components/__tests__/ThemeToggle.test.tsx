@@ -1,12 +1,12 @@
 // @vitest-environment jsdom
 import { render, screen, fireEvent } from "@testing-library/react";
 import ThemeToggle from "../ThemeToggle";
-import { useThemeStore } from "../../stores/useThemeStore";
+import { themeStore } from "../../stores/useThemeStore";
 import { describe, it, beforeEach, expect, vi } from "vitest";
 
 vi.mock("../../stores/useThemeStore");
 
-const mockUseThemeStore = useThemeStore as unknown as ReturnType<typeof vi.fn>;
+const mockThemeStore = themeStore as unknown as ReturnType<typeof vi.fn>;
 
 describe("ThemeToggle", () => {
   beforeEach(() => {
@@ -14,7 +14,7 @@ describe("ThemeToggle", () => {
   });
 
   it("renderiza y muestra el ícono de tema actual", () => {
-    mockUseThemeStore.mockReturnValue({ theme: "light", toggleTheme: vi.fn() });
+    mockThemeStore.mockReturnValue({ theme: "light", toggleTheme: vi.fn() });
     render(<ThemeToggle />);
     expect(screen.getByRole("button", { name: /cambiar claro\/oscuro/i })).toBeInTheDocument();
     expect(screen.getByText("☀️")).toBeInTheDocument();
@@ -22,7 +22,7 @@ describe("ThemeToggle", () => {
 
   it("llama a toggleTheme() al hacer click", () => {
     const toggle = vi.fn();
-    mockUseThemeStore.mockReturnValue({ theme: "dark", toggleTheme: toggle });
+    mockThemeStore.mockReturnValue({ theme: "dark", toggleTheme: toggle });
     render(<ThemeToggle />);
     const btn = screen.getByRole("button", { name: /cambiar claro\/oscuro/i });
     fireEvent.click(btn);

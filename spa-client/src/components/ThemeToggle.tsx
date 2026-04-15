@@ -1,9 +1,9 @@
 // src/components/ThemeToggle.tsx
-import { useThemeStore } from '../stores/useThemeStore';
+import { themeStore } from '../stores/useThemeStore';
 import './ThemeToggle.css';
 
 export default function ThemeToggle() {
-  const { theme, toggleTheme } = useThemeStore();
+  const { theme, toggleTheme } = themeStore();
   return (
     <button
       className={
