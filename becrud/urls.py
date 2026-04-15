@@ -3,7 +3,7 @@ URL configuration for becrud project.
 
 Routes:
 - admin/
-- api/reservas/ (DRF ViewSet reserva)
+- api/ (rest: reservas, google auth)
 """
 from django.contrib import admin
 from django.urls import path, include
@@ -16,4 +16,5 @@ router.register(r'reservas', ReservaViewSet, basename='reserva')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('api/', include('api.urls')),
 ]
