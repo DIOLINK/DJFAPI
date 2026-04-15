@@ -32,3 +32,4 @@ venv/
 .agents/*
 AGENTS.md
 skills-lock.json
+.coverage
