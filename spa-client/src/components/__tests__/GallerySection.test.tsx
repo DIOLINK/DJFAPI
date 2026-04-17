@@ -25,7 +25,7 @@ describe("GallerySection", () => {
   it("muestra loader de carga inicialmente", () => {
     globalThis._fetchGalleryMock = () => new Promise(() => {});
     render(<GallerySection />);
-    expect(screen.getByText(/cargando/i)).toBeInTheDocument();
+    expect(screen.getByRole('progressbar')).toBeInTheDocument();
   });
 
   it("renderiza imágenes desde el backend", async () => {

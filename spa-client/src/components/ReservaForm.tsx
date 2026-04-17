@@ -36,8 +36,7 @@ export function ReservaForm() {
             value={fecha}
             onChange={setFecha}
             disablePast
-            required
-            renderInput={(params) => <TextField {...params} />}
+            slotProps={{ textField: { required: true } }}
           />
           <TextField label="Nota (opcional)" multiline rows={2} value={nota} onChange={e => setNota(e.target.value)} />
         <Button variant="contained" type="submit" disabled={loading || !fecha}>
@@ -46,6 +45,7 @@ export function ReservaForm() {
         {success && <Alert severity="success">Reserva creada. Revisa tu correo.</Alert>}
         {error && <Alert severity="error">{error}</Alert>}
       </Stack>
-    </Box>
+    </LocalizationProvider>
+  </Box>
   );
 }

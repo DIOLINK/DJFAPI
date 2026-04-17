@@ -1,7 +1,9 @@
 // @vitest-environment jsdom
 import { render, screen, fireEvent } from '@testing-library/react'
-import { describe, test, expect } from 'vitest'
+import { describe, test, expect, vi } from 'vitest'
 import App from './App'
+import * as useGalleryModule from './hooks/useGallery'
+import * as authStoreModule from './store/authStore'
 
 describe('Landing Page Romantic SPA', () => {
   test('renderiza sección hero y CTA', () => {
@@ -12,12 +14,22 @@ describe('Landing Page Romantic SPA', () => {
   })
 
   test('renderiza galería con imágenes', () => {
-    render(<App />)
-    // Dummy images que aparecen en la galería
-    expect(screen.getByAltText(/Pareja feliz/i)).toBeInTheDocument()
-    expect(screen.getByAltText(/Ramo de flores/i)).toBeInTheDocument()
-    expect(screen.getByAltText(/Momentos románticos/i)).toBeInTheDocument()
-  })
+    // Mock useGallery to provide dummy images
+    vi.spyOn(useGalleryModule, 'useGallery').mockReturnValue({
+      images: [
+        { src: 'pareja.jpg', alt: 'Pareja feliz' },
+        { src: 'ramo.jpg', alt: 'Ramo de flores' },
+        { src: 'momentos.jpg', alt: 'Momentos románticos' }
+      ],
+      loading: false,
+      error: undefined,
+    });
+    render(<App />);
+    expect(screen.getByAltText(/Pareja feliz/i)).toBeInTheDocument();
+    expect(screen.getByAltText(/Ramo de flores/i)).toBeInTheDocument();
+    expect(screen.getByAltText(/Momentos románticos/i)).toBeInTheDocument();
+    vi.restoreAllMocks();
+  });
 
   test('muestra funcionalidades/ventajas (showcase)', () => {
     render(<App />)
@@ -32,24 +44,41 @@ describe('Landing Page Romantic SPA', () => {
     expect(screen.getByText(/Camila V./i)).toBeInTheDocument()
   })
 
-  test('formulario contacto: campos requeridos', () => {
-    render(<App />)
-    expect(screen.getByPlaceholderText(/Nombre/i)).toBeInTheDocument()
-    expect(screen.getByPlaceholderText(/Correo/i)).toBeInTheDocument()
-    expect(screen.getByPlaceholderText(/Cuéntanos tu idea/i)).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /enviar mensaje/i })).toBeInTheDocument()
-  })
+  test('formulario de reserva: campos requeridos', () => {
+    // Mock user auth so form renders
+    const storeObj = { user: { name: 'test' }, token: 'mock-token', setUser: () => {} };
+    const mockStore = (selector) => selector(storeObj);
+    Object.assign(mockStore, { getState: () => storeObj });
+    const authMock = vi.spyOn(authStoreModule, 'authStore', 'get').mockReturnValue(mockStore);
+    render(<App />);
+    // Field: Fecha y hora (DateTimePicker)
+    // There may be several elements with this label due to MUI Picker rendering structure.
+    expect(screen.getAllByLabelText(/Fecha y hora/i).length).toBeGreaterThan(0);
+    // Field: Nota (opcional)
+    expect(screen.getByLabelText(/Nota \(opcional\)/i)).toBeInTheDocument();
+    // Button: Reservar (form submit, not CTA)
+    const reservarButtons = screen.getAllByRole('button', { name: /reservar/i });
+    // There could be more than one; ensure at least one exactly "Reservar"
+    expect(reservarButtons.some(btn => btn.textContent?.trim() === 'Reservar')).toBe(true);
+    authMock.mockRestore();
+  });
 
-  test('formulario contacto: ingreso texto', () => {
-    render(<App />)
-    const nombre = screen.getByPlaceholderText(/Nombre/i)
-    const correo = screen.getByPlaceholderText(/Correo/i)
-    const mensaje = screen.getByPlaceholderText(/Cuéntanos tu idea/i)
-    fireEvent.change(nombre, { target: { value: 'Ana' } })
-    fireEvent.change(correo, { target: { value: 'ana@email.com' } })
-    fireEvent.change(mensaje, { target: { value: 'Quiero una cita el viernes.' } })
-    expect(nombre).toHaveValue('Ana')
-    expect(correo).toHaveValue('ana@email.com')
-    expect(mensaje).toHaveValue('Quiero una cita el viernes.')
-  })
+  test('formulario de reserva: ingreso de campos', () => {
+    // Mock user auth so form renders
+    const storeObj = { user: { name: 'test' }, token: 'mock-token', setUser: () => {} };
+    const mockStore = (selector) => selector(storeObj);
+    Object.assign(mockStore, { getState: () => storeObj });
+    const authMock = vi.spyOn(authStoreModule, 'authStore', 'get').mockReturnValue(mockStore);
+    render(<App />);
+    // Field: Fecha y hora (DateTimePicker)
+    // There may be several elements due to picker rendering structure.
+    expect(screen.getAllByLabelText(/Fecha y hora/i).length).toBeGreaterThan(0);
+    const notaInput = screen.getByLabelText(/Nota \(opcional\)/i);
+    fireEvent.change(notaInput, { target: { value: 'Quiero una cita el viernes.' } });
+    expect(notaInput).toHaveValue('Quiero una cita el viernes.');
+    // Button should be present (may be disabled)
+    const reservarButtons = screen.getAllByRole('button', { name: /reservar/i });
+    expect(reservarButtons.some(btn => btn.textContent?.trim() === 'Reservar')).toBe(true);
+    authMock.mockRestore();
+  });
 })
