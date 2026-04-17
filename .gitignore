@@ -34,3 +34,4 @@ AGENTS.md
 skills-lock.json
 .coverage
 .github/*
+dev_tools.sh
