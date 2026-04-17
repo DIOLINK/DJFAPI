@@ -4,8 +4,11 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 # Colores
-RED='\033[0;31m'; GREEN='\033[0;32m'; CYAN='\033[0;36m'; NC='\033[0m'; BOLD='\033[1m'
+RED='[0;31m'; GREEN='[0;32m'; CYAN='[0;36m'; NC='[0m'; BOLD='[1m'
 
+# Versión tooling Caveman
+declare CAVETOOLS_VERSION="v2024.04.16-1"
+echo -e "${BOLD}${CYAN}CAVEMAN DEV TOOLS (versión $CAVETOOLS_VERSION)${NC}"
 # 1. Banner
 ./tools/print_banner.sh
 
@@ -13,7 +16,7 @@ RED='\033[0;31m'; GREEN='\033[0;32m'; CYAN='\033[0;36m'; NC='\033[0m'; BOLD='\03
 ./tools/check_cmds.sh
 ./tools/check_venv.sh
 ./tools/check_node_modules.sh
-./tools/check_python_deps.sh
+./tools/check_python_deps.sh || true
 
 # Detecta si hay dependencias python faltantes
 show_pyfix=false
@@ -134,7 +137,7 @@ while true; do
       if [ "$show_pyfix" = true ]; then
         ./tools/install_missing_python_deps.sh
         # Revalida después de instalar
-        ./tools/check_python_deps.sh && show_pyfix=false
+        ./tools/check_python_deps.sh || true && show_pyfix=false
       else
         echo -e "${RED}No hay dependencias Python pendientes${NC}"
       fi

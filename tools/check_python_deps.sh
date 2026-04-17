@@ -1,6 +1,6 @@
 #!/bin/bash
 # Validación robusta de paquetes Python instalados (por import real)
-RED='\033[0;31m'; GREEN='\033[0;32m'; CYAN='\033[0;36m'; NC='\033[0m'
+RED='[0;31m'; GREEN='[0;32m'; CYAN='[0;36m'; NC='[0m'
 pycheck_failed=false
 MISSING_PY=""
 PY_DEPS=(
@@ -26,7 +26,7 @@ for line in "${PY_DEPS[@]}"; do
 done
 if [ "$pycheck_failed" = true ]; then
   echo -e "${RED}\nExisten dependencias Python FALTANTES: puedes instalarlas con la opción del menú principal.${NC}"
-  exit 6
+  return 6 2>/dev/null || exit 6
 else
   echo -e "${GREEN}✓ Todos los imports Python OK en tu venv.${NC}"
   rm -f tools/missing_python_deps.txt 2>/dev/null || true
