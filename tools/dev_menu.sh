@@ -37,7 +37,37 @@ while true; do
   case $opt in
     1)
       echo -e "${CYAN}[BACKEND] Check...${NC}"
-      venv/bin/python manage.py check
+      BACKEND_CHECK_OUTPUT=$(venv/bin/python manage.py check 2>&1)
+      echo -e "$BACKEND_CHECK_OUTPUT"
+      # Detecta Pillow faltante y propone instalación
+      if echo "$BACKEND_CHECK_OUTPUT" | grep -q 'Cannot use ImageField because Pillow is not installed'; then
+        echo -e "${RED}Django detectó que falta Pillow para ImageField.${NC}"
+        read -rp "¿Te instalo Pillow en este entorno virtual y actualizo requirements.txt? (S/n): " PILLOW_YN
+        if [[ "$PILLOW_YN" =~ ^[Ss]?$ ]]; then
+          source venv/bin/activate && pip install Pillow && pip freeze > requirements.txt
+          echo -e "${GREEN}Pillow instalado y requirements.txt actualizado.${NC}"
+          echo -e "Reintentando backend check..."
+          BACKEND_CHECK_OUTPUT=$(venv/bin/python manage.py check 2>&1)
+          echo -e "$BACKEND_CHECK_OUTPUT"
+          if echo "$BACKEND_CHECK_OUTPUT" | grep -q 'System check identified 1 issue' && echo "$BACKEND_CHECK_OUTPUT" | grep -q 'Cannot use ImageField because Pillow is not installed'; then
+            echo -e "${RED}ATENCIÓN: Pillow sigue sin estar disponible. Revisa el entorno virtual manualmente.${NC}"
+            break
+          fi
+        fi
+      fi
+      # Detecta cualquier error 'No module named' y propone instalación por input del usuario
+      if echo "$BACKEND_CHECK_OUTPUT" | grep -qE "No module named '([a-zA-Z0-9_]+)'"; then
+        MODNAME=$(echo "$BACKEND_CHECK_OUTPUT" | grep -oE "No module named '([a-zA-Z0-9_]+)'" | grep -oE "'([a-zA-Z0-9_]+)'" | tr -d "'")
+        echo -e "${RED}Detectado: falta el módulo Python '$MODNAME' requerido.${NC}"
+        read -rp "¿Cómo se llama el paquete pip a instalar para '$MODNAME'? (déjalo vacío para ignorar): " PIPNAME
+        if [[ -n "$PIPNAME" ]]; then
+          source venv/bin/activate && pip install "$PIPNAME" && pip freeze > requirements.txt
+          echo -e "${GREEN}Paquete $PIPNAME instalado y requirements.txt actualizado.${NC}"
+          echo -e "Reintentando backend check..."
+          BACKEND_CHECK_OUTPUT=$(venv/bin/python manage.py check 2>&1)
+          echo -e "$BACKEND_CHECK_OUTPUT"
+        fi
+      fi
       echo -e "${CYAN}[FRONTEND] Build...${NC}"
       (cd spa-client && pnpm build)
       echo -e "${GREEN}Build todo OK.${NC}"
