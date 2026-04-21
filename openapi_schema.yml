@@ -1,0 +1,966 @@
+openapi: 3.0.3
+info:
+  title: DJFAPI Backend
+  version: 1.0.0
+  description: API backend generado en Django/DRF, docs automáticas OpenAPI3 (swagger-ui/redoc)
+paths:
+  /api/admin/carrousel/:
+    get:
+      operationId: admin_carrousel_list
+      tags:
+      - admin
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarrouselItem'
+          description: ''
+    post:
+      operationId: admin_carrousel_create
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarrouselItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CarrouselItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CarrouselItem'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarrouselItem'
+          description: ''
+  /api/admin/carrousel/{id}/:
+    get:
+      operationId: admin_carrousel_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este carrousel item.
+        required: true
+      tags:
+      - admin
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarrouselItem'
+          description: ''
+    put:
+      operationId: admin_carrousel_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este carrousel item.
+        required: true
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarrouselItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CarrouselItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CarrouselItem'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarrouselItem'
+          description: ''
+    patch:
+      operationId: admin_carrousel_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este carrousel item.
+        required: true
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCarrouselItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCarrouselItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCarrouselItem'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarrouselItem'
+          description: ''
+    delete:
+      operationId: admin_carrousel_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este carrousel item.
+        required: true
+      tags:
+      - admin
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/admin/legaltext/:
+    get:
+      operationId: admin_legaltext_list
+      tags:
+      - admin
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LegalText'
+          description: ''
+    post:
+      operationId: admin_legaltext_create
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LegalText'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LegalText'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LegalText'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegalText'
+          description: ''
+  /api/admin/legaltext/{id}/:
+    get:
+      operationId: admin_legaltext_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este legal text.
+        required: true
+      tags:
+      - admin
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegalText'
+          description: ''
+    put:
+      operationId: admin_legaltext_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este legal text.
+        required: true
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LegalText'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LegalText'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LegalText'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegalText'
+          description: ''
+    patch:
+      operationId: admin_legaltext_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este legal text.
+        required: true
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLegalText'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedLegalText'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedLegalText'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegalText'
+          description: ''
+    delete:
+      operationId: admin_legaltext_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este legal text.
+        required: true
+      tags:
+      - admin
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/auth/google/:
+    post:
+      operationId: auth_google_create
+      tags:
+      - auth
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/auth/google/callback/:
+    get:
+      operationId: auth_google_callback_retrieve
+      tags:
+      - auth
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/auth/google/login/:
+    get:
+      operationId: auth_google_login_retrieve
+      tags:
+      - auth
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/carrousel/:
+    get:
+      operationId: carrousel_list
+      tags:
+      - carrousel
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarrouselItem'
+          description: ''
+  /api/carrousel/{id}/:
+    get:
+      operationId: carrousel_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este carrousel item.
+        required: true
+      tags:
+      - carrousel
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarrouselItem'
+          description: ''
+  /api/gallery/:
+    get:
+      operationId: gallery_retrieve
+      tags:
+      - gallery
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/legaltext/:
+    get:
+      operationId: legaltext_list
+      tags:
+      - legaltext
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LegalText'
+          description: ''
+  /api/legaltext/{id}/:
+    get:
+      operationId: legaltext_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este legal text.
+        required: true
+      tags:
+      - legaltext
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegalText'
+          description: ''
+  /api/reservas/:
+    get:
+      operationId: reservas_list
+      tags:
+      - reservas
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reserva'
+          description: ''
+    post:
+      operationId: reservas_create
+      tags:
+      - reservas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reserva'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Reserva'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Reserva'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reserva'
+          description: ''
+  /api/reservas/{id}/:
+    get:
+      operationId: reservas_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este reserva.
+        required: true
+      tags:
+      - reservas
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reserva'
+          description: ''
+    put:
+      operationId: reservas_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este reserva.
+        required: true
+      tags:
+      - reservas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reserva'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Reserva'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Reserva'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reserva'
+          description: ''
+    patch:
+      operationId: reservas_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este reserva.
+        required: true
+      tags:
+      - reservas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedReserva'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedReserva'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedReserva'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reserva'
+          description: ''
+    delete:
+      operationId: reservas_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este reserva.
+        required: true
+      tags:
+      - reservas
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/reservas/{id}/cancelar/:
+    post:
+      operationId: reservas_cancelar_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este reserva.
+        required: true
+      tags:
+      - reservas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reserva'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Reserva'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Reserva'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reserva'
+          description: ''
+  /api/reservas/{id}/confirmar/:
+    post:
+      operationId: reservas_confirmar_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este reserva.
+        required: true
+      tags:
+      - reservas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reserva'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Reserva'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Reserva'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reserva'
+          description: ''
+  /api/schema/:
+    get:
+      operationId: schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - ug
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - schema
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+components:
+  schemas:
+    CarrouselItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        imagen:
+          type: string
+          format: uri
+        texto:
+          type: string
+          maxLength: 255
+        orden:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        activo:
+          type: boolean
+        creado:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - creado
+      - id
+      - imagen
+      - texto
+    EstadoEnum:
+      enum:
+      - pendiente
+      - confirmada
+      - cancelada
+      type: string
+      description: |-
+        * `pendiente` - Pendiente
+        * `confirmada` - Confirmada
+        * `cancelada` - Cancelada
+    LegalText:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        titulo:
+          type: string
+          maxLength: 100
+        contenido:
+          type: string
+        visible:
+          type: boolean
+        creado:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - contenido
+      - creado
+      - id
+      - titulo
+    Paciente:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          title: Nombre de usuario
+          description: Obligatorio. Longitud máxima de 150 caracteres. Solo puede
+            estar formado por letras, números y los caracteres @/./+/-/_.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Dirección de email
+          maxLength: 254
+        first_name:
+          type: string
+          title: Nombre
+          maxLength: 150
+        last_name:
+          type: string
+          title: Apellido
+          maxLength: 150
+      required:
+      - id
+      - username
+    PatchedCarrouselItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        imagen:
+          type: string
+          format: uri
+        texto:
+          type: string
+          maxLength: 255
+        orden:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        activo:
+          type: boolean
+        creado:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedLegalText:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        titulo:
+          type: string
+          maxLength: 100
+        contenido:
+          type: string
+        visible:
+          type: boolean
+        creado:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedReserva:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        paciente:
+          allOf:
+          - $ref: '#/components/schemas/Paciente'
+          readOnly: true
+        paciente_id:
+          type: integer
+          writeOnly: true
+        fecha_hora:
+          type: string
+          format: date-time
+        estado:
+          allOf:
+          - $ref: '#/components/schemas/EstadoEnum'
+          readOnly: true
+        nota:
+          type: string
+        creado:
+          type: string
+          format: date-time
+          readOnly: true
+        actualizado:
+          type: string
+          format: date-time
+          readOnly: true
+    Reserva:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        paciente:
+          allOf:
+          - $ref: '#/components/schemas/Paciente'
+          readOnly: true
+        paciente_id:
+          type: integer
+          writeOnly: true
+        fecha_hora:
+          type: string
+          format: date-time
+        estado:
+          allOf:
+          - $ref: '#/components/schemas/EstadoEnum'
+          readOnly: true
+        nota:
+          type: string
+        creado:
+          type: string
+          format: date-time
+          readOnly: true
+        actualizado:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - actualizado
+      - creado
+      - estado
+      - fecha_hora
+      - id
+      - paciente
+      - paciente_id
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
