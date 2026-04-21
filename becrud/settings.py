@@ -5,9 +5,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # ---
+    'corsheaders',  # <--- habilita CORS
+    # ---
     'rest_framework',
-    'drf_yasg',  # documentación swagger
     'rest_framework_simplejwt',
+    'drf_spectacular',  # documentación swagger/openapi moderno
     'api',
 ]
 
@@ -15,9 +18,11 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # <--- debe ir lo más arriba posible
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -66,3 +71,17 @@ SECRET_KEY = 'django-insecure-devsecretkeyforlocaldev'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+# --- CORS settings para desarrollo frontend ---
+CORS_ALLOW_ALL_ORIGINS = True
+# Cuando quieras mayor control usa:
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:5173",
+# ]
+
+# --- Swagger/OpenAPI docs (drf-spectacular) ---
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'DJFAPI Backend',
+    'DESCRIPTION': 'API backend generado en Django/DRF, docs automáticas OpenAPI3 (swagger-ui/redoc)',
+    'VERSION': '1.0.0',
+}

@@ -4,7 +4,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.contrib import admin
 from .googleauth import GoogleLogin, GoogleCallback
-from .views import CarrouselItemViewSet, AdminCarrouselItemViewSet, LegalTextViewSet, AdminLegalTextViewSet
+from .views import CarrouselItemViewSet, AdminCarrouselItemViewSet, LegalTextViewSet, AdminLegalTextViewSet, GalleryView
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -27,6 +27,7 @@ urlpatterns = [
     path('auth/google/login/', GoogleLogin.as_view(), name='google-login'),
     path('auth/google/callback/', GoogleCallback.as_view(), name='google-callback'),
     path('auth/google/', GoogleAuthVerify.as_view(), name='google-verify'),
+    path('gallery/', GalleryView.as_view(), name='gallery'),
     path('', include(router.urls)),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),

@@ -47,3 +47,24 @@ class LegalTextTest(TestCase):
         resp = self.client.get(reverse('legaltext-list'))
         self.assertEqual(resp.status_code, 200)
         self.assertGreaterEqual(len(resp.json()), 1)
+
+class GalleryViewTest(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+
+    def test_gallery_endpoint_exists(self):
+        resp = self.client.get('/api/gallery/')
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertIn('images', data)
+        self.assertIsInstance(data['images'], list)
+        # Deben ser string o lista vacía
+        for img in data['images']:
+            self.assertIsInstance(img, str)
+
+    def test_gallery_endpoint_empty(self):
+        # Si cambias la view a images=[], este test lo valida también
+        # Aquí solo comprobamos estructura
+        resp = self.client.get('/api/gallery/')
+        data = resp.json()
+        self.assertTrue(isinstance(data['images'], list))

@@ -2,7 +2,9 @@ from .models import Reserva, CarrouselItem, LegalText
 from .serializers import ReservaSerializer, CarrouselItemSerializer, LegalTextSerializer
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
 from api.gcal_utils import crear_evento_calendar
 from api.email_utils import enviar_mail_reserva_confirmada
 from django.db import transaction
@@ -65,3 +67,16 @@ class AdminLegalTextViewSet(viewsets.ModelViewSet):
     queryset = LegalText.objects.all()
     serializer_class = LegalTextSerializer
     permission_classes = [permissions.IsAdminUser]
+
+# ENDPOINT STUB para /api/gallery/
+class GalleryView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        # Puedes poblar esta lista con imágenes reales después
+        images = [
+            "https://picsum.photos/400/300?random=1",
+            "https://picsum.photos/400/300?random=2",
+            "https://picsum.photos/400/300?random=3",
+        ]
+        return Response({"images": images})
