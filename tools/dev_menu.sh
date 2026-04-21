@@ -32,10 +32,13 @@ while true; do
   echo "3. Test y generar reporte"
   echo "4. Correr backend+frontend local"
   echo "5. Levantar demo pública frontend (ngrok)"
-  echo "6. Salir"
+  echo "6. Ver reporte coverage frontend (servidor local)"
+  echo "7. Actualizar/Crear Swagger/OpenAPI (UI-export)"
+  echo "8. Salir"
   if [ "$show_pyfix" = true ]; then
-    echo "7. Instalar dependencias Python faltantes"
+    echo "9. Instalar dependencias Python faltantes"
   fi
+  echo "10. Crear usuario admin Django (superusuario)"
   read -rp "> " opt
   case $opt in
     1)
@@ -94,23 +97,47 @@ while true; do
 
       if [ -d "spa-client" ]; then
         echo -e "${CYAN}[FRONTEND] Test...${NC}"
-        echo "# Frontend Test Report\nVersion: $version_tag\n" > "$frontend_log"
-        if [ -f "spa-client/package.json" ] && grep -q 'test' "spa-client/package.json"; then
-          (cd spa-client && pnpm test -- --coverage 2>&1 | tee -a "../$frontend_log") || true
-        else
-          echo "No hay test script definido" >> "$frontend_log"
-        fi
+echo "# Frontend Test Report" > "$frontend_log"
+echo "**Version:** $version_tag" >> "$frontend_log"
+echo -e "\n---\n\n### Test Command\n\`\`\`shell\npnpm test\n\`\`\`\n\n---\n" >> "$frontend_log"
+
+if [ -f "spa-client/package.json" ] && grep -q 'test' "spa-client/package.json"; then
+  set +e
+  FRONTEND_OUT=$(cd spa-client && pnpm test 2>&1)
+  FRONTEND_STATUS=$?
+  set -e
+  # Siempre escribe la sección de resultado de test
+  if [ -z "$FRONTEND_OUT" ]; then
+    FRONTEND_OUT="(Sin salida de los tests - posible error grave o configuración faltante)"
+  fi
+  echo -e "#### Test Output\n\`\`\`text\n$FRONTEND_OUT\n\`\`\`\n" >> "$frontend_log"
+  if [ $FRONTEND_STATUS -ne 0 ] || echo "$FRONTEND_OUT" | grep -q "Error:"; then
+    echo -e "❌ **Se detectaron errores en la ejecución de los tests.**\n" >> "$frontend_log"
+  else
+    echo -e "✅ **Todos los tests pasaron correctamente.**\n" >> "$frontend_log"
+  fi
+else
+  echo "No hay test script definido" >> "$frontend_log"
+fi
       fi
       echo -e "${GREEN}Tests completados. Log en log-test/*.md${NC}"
       ;;
     4)
-      echo -e "${CYAN}Iniciando backend...${NC}"
-      nohup venv/bin/python manage.py runserver > log-test/backend_dev.log 2>&1 &
+      echo -e "${CYAN}Lanzando backend en nueva terminal...${NC}"
+      osascript <<EOF
+      tell application "Terminal"
+          do script "cd '$(pwd)' && source venv/bin/activate && python manage.py runserver"
+      end tell
+EOF
       sleep 2
-      echo -e "${CYAN}Iniciando frontend (vite)...${NC}"
-      (cd spa-client && nohup pnpm dev > ../log-test/frontend_dev.log 2>&1 &)
+      echo -e "${CYAN}Lanzando frontend (vite) en nueva terminal...${NC}"
+      osascript <<EOF
+      tell application "Terminal"
+          do script "cd '$(pwd)/spa-client' && pnpm dev"
+      end tell
+EOF
       sleep 3
-      echo -e "${GREEN}Ambos servicios corriendo (logs en log-test).${NC}"
+      echo -e "${GREEN}Ambos servicios corriendo en ventanas de Terminal aparte.${NC}"
       echo -e "\n${BOLD}Backend: http://localhost:8000/\nFrontend: http://localhost:5173/${NC}"
       ;;
     5)
@@ -132,8 +159,66 @@ while true; do
       fi
       ;;
     6)
-      echo "Bye"; exit 0;;
+      echo -e "${CYAN}Verificando/generando coverage de frontend...${NC}"
+      if [ ! -d "spa-client/coverage" ] || [ ! -f "spa-client/coverage/index.html" ]; then
+        echo -e "${CYAN}Generando reporte de coverage primero...${NC}"
+        (cd spa-client && pnpm test)
+      fi
+      if ! command -v npx > /dev/null 2>&1; then
+        echo -e "${RED}No se encontró 'npx'. Instala Node.js >= 16 para usar serve.${NC}"
+        break
+      fi
+      echo -e "${CYAN}Levantando servidor para coverage HTML en http://localhost:3000 ... (Ctrl+C para salir)${NC}"
+      npx serve -l 3000 spa-client/coverage
+      ;;
     7)
+      echo -e "${CYAN}Verificando e instalando Swagger/OpenAPI (drf-spectacular)...${NC}"
+      if ! grep -q drf-spectacular requirements.txt; then
+        echo -e "${CYAN}Agregando drf-spectacular a requirements.txt...${NC}"
+        echo 'drf-spectacular==0.27.2' >> requirements.txt
+      fi
+      source venv/bin/activate && pip install -r requirements.txt
+      echo -e "${CYAN}Exportando schema OpenAPI a openapi_schema.yml...${NC}"
+      venv/bin/python manage.py spectacular --color --file openapi_schema.yml || {
+        echo -e "${RED}ERROR: No se pudo exportar el schema. Verifica configuración en settings.py y urls.py según la ayuda sugerida arriba.${NC}"
+        break
+      }
+      echo -e "${GREEN}Documento OpenAPI generado: openapi_schema.yml${NC}"
+      echo -e "Swagger UI disponible en: http://localhost:8000/api/schema/swagger-ui/"
+      if command -v open >/dev/null 2>&1; then
+        open http://localhost:8000/api/schema/swagger-ui/
+      fi
+      ;;
+    8)
+      echo -e "${CYAN}Matando procesos Django runserver y pnpm dev (de este proyecto)...${NC}"
+      pgrep -f "python manage.py runserver" | xargs -r kill 2>/dev/null || true
+      pgrep -f "pnpm dev" | xargs -r kill 2>/dev/null || true
+      echo -e "${GREEN}Backend y frontend detenidos (si estaban activos).${NC}"
+      echo "Bye"
+      exit 0;;
+    10)
+      echo -e "${BOLD}${CYAN}Creando superusuario admin Django...${NC}"
+      # Valida si existe
+      EXISTE=$(venv/bin/python manage.py shell -c "from django.contrib.auth.models import User; print(User.objects.filter(username='admin').exists())")
+      if [ "$EXISTE" = "True" ]; then
+        echo -e "${RED}Ya existe el usuario 'admin'. Si quieres regenerarlo bórralo desde el admin o línea de comandos primero.${NC}"
+        break
+      fi
+      # Crea el superusuario sin interacción
+      venv/bin/python manage.py createsuperuser --noinput --username='admin' --email='Admin@test.com'
+      # Setea la contraseña automáticamente
+      venv/bin/python manage.py shell <<EOF
+from django.contrib.auth.models import User
+u = User.objects.get(username='admin')
+u.set_password('djfapi:main.36')
+u.is_superuser = True
+u.is_staff = True
+u.save()
+print("Contraseña seteada correctamente para usuario 'admin'")
+EOF
+      echo -e "${GREEN}Superusuario creado con éxito. Usuario: 'admin' | Pass: djfapi:main.36${NC}"
+      ;;
+    9)
       if [ "$show_pyfix" = true ]; then
         ./tools/install_missing_python_deps.sh
         # Revalida después de instalar
@@ -144,4 +229,4 @@ while true; do
       ;;
     *) echo -e "${RED}Opción no válida${NC}";;
   esac
-done
+ done
